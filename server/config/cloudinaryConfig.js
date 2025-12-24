@@ -13,7 +13,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'ss-sound-uploads', // Cloudinary'de resimlerin depolanacağı klasör
-    allowed_formats: ['jpeg', 'png', 'jpg', 'gif', 'webp'],
+
   },
 });
 
