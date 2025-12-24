@@ -3,8 +3,10 @@ const CloudinaryStorage = require('multer-storage-cloudinary');
 const multer = require('multer');
 
 // Cloudinary yapılandırması
-// Render'da ayarlanan CLOUDINARY_URL ortam değişkenini otomatik olarak kullanır
-cloudinary.config();
+// CLOUDINARY_URL ortam değişkenini açıkça kullanarak yapılandır
+cloudinary.config({
+  cloudinary_url: process.env.CLOUDINARY_URL
+});
 
 // Multer için Cloudinary depolama motorunu ayarla
 const storage = new CloudinaryStorage({
