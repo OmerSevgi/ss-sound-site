@@ -1,4 +1,7 @@
 const express = require('express');
+console.log('--- KONTROL ---');
+console.log('Render Ortamindan Gelen CLOUDINARY_URL:', process.env.CLOUDINARY_URL);
+console.log('--- KONTROL SONU ---');
 const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
