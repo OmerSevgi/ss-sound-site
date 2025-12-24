@@ -51,8 +51,11 @@ const EventForm = ({ initialData = {}, onSubmit, isEditMode = false, isLoading =
 
   const renderFilePreview = (file) => {
     // file bir string ise (mevcut medya), URL'den tip çıkarımı yap
-    if (typeof file === 'string') {
-      const src = `${process.env.REACT_APP_STATIC_ASSET_URL}${file}`;
+    if (typeof file === 'string' && file) { // 'file' null veya undefined değilse devam et
+      // Eğer dosya zaten tam bir URL ise (Cloudinary'den gelen), doğrudan kullan
+      // Aksi takdirde, REACT_APP_API_URL'i base olarak kullan
+      const src = file.startsWith('http') ? file : `${process.env.REACT_APP_BACKEND_BASE_URL || ''}/${file}`;
+      
       if (file.match(/\.(jpeg|jpg|gif|png|webp|svg|bmp)$/i)) {
         return <img src={src} alt="Mevcut medya" className="w-full h-full object-cover" />;
       }
