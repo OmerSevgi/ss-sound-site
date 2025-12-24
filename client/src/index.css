@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --gradient-start: black;
+    --gradient-middle: #E5E4E2; /* Platinum */
+  }
+
+  .dark:root {
+    --gradient-start: #FBBF24; /* Yellow */
+    --gradient-middle: #E5E4E2; /* Platinum */
+  }
+}
+
+@layer utilities {
+  .text-gradient-animated {
+    background-image: linear-gradient(to right, var(--gradient-middle), var(--gradient-start), var(--gradient-middle));
+    background-size: 200% auto;
+    color: transparent; /* Fallback for older browsers */
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: text-gradient-animation 4s ease-in-out infinite;
+  }
+
+  @keyframes text-gradient-animation {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+}
+
+body {
+  @apply bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark min-h-screen transition-colors duration-300;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
