@@ -29,8 +29,13 @@ const AdminNewEventPage = () => {
         });
 
         uploadResponse.data.urls.forEach(url => {
-          if (url.match(/\.(jpeg|jpg|gif|png|webp|svg|bmp)$/i)) uploadedImageUrls.push(url);
-          else if (url.match(/\.(mp4|mov|avi|mkv|webm|ogg)$/i)) uploadedVideoUrls.push(url);
+          if (typeof url === 'string' && url) {
+            if (url.match(/\.(jpeg|jpg|gif|png|webp|svg|bmp)$/i)) {
+              uploadedImageUrls.push(url);
+            } else if (url.match(/\.(mp4|mov|avi|mkv|webm|ogg)$/i)) {
+              uploadedVideoUrls.push(url);
+            }
+          }
         });
       }
 
