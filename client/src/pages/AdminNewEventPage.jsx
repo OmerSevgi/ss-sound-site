@@ -24,18 +24,11 @@ const AdminNewEventPage = () => {
         const mediaFormData = new FormData();
         mediaFiles.forEach(file => mediaFormData.append('media', file));
 
-        console.log('--- API YÜKLEME İSTEĞİ ÖNCESİ ---');
         const uploadResponse = await api.post('/upload', mediaFormData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-        console.log('--- API YÜKLEME İSTEĞİ SONRASI ---');
-
-        // DEBUG: Log the server response to the console
-        console.log('--- SUNUCU YANITI ---');
-        console.log(JSON.stringify(uploadResponse.data, null, 2));
-        console.log('---------------------');
 
         uploadResponse.data.urls.forEach(url => {
           if (typeof url === 'string' && url) {

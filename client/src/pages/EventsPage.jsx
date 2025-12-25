@@ -76,8 +76,7 @@ const EventsPage = () => {
                     </div>
                   ) : (
                     <img
-                      src={(event.imageUrls && event.imageUrls.length > 0) ? `${process.env.REACT_APP_STATIC_ASSET_URL}
-     ${event.imageUrls[0]}` : 'https://via.placeholder.com/400x300'}
+                      src={(event.imageUrls && event.imageUrls.length > 0) ? event.imageUrls[0] : 'https://via.placeholder.com/400x300'}
                       alt={event.name}
                       className="w-full h-40 object-cover bg-card-light dark:bg-card-dark rounded-t-lg"
                       onError={(e) => (e.target.src = 'https://via.placeholder.com/400x300')}
