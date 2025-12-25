@@ -49,6 +49,14 @@ const AdminNewEventPage = () => {
 
       navigate('/admin/dashboard');
     } catch (err) {
+      // DEBUG: Log the entire error object to the console
+      console.error('--- HATA YAKALANDI ---');
+      console.error('Error Object:', err);
+      if (err.response) {
+        console.error('Error Response Data:', err.response.data);
+      }
+      console.error('--------------------');
+      
       setError(err.message);
     } finally {
       setIsLoading(false);
