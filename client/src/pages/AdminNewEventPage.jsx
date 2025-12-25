@@ -11,10 +11,12 @@ const AdminNewEventPage = () => {
   const [error, setError] = useState(null);
 
   const handleCreateEvent = async (formData, mediaFiles) => {
+    console.log('--- handleCreateEvent FONKSİYONU BAŞLADI ---');
     setIsLoading(true);
     setError(null);
 
     try {
+      console.log('--- TRY BLOĞU BAŞLADI ---');
       let uploadedImageUrls = [];
       let uploadedVideoUrls = [];
 
@@ -22,11 +24,13 @@ const AdminNewEventPage = () => {
         const mediaFormData = new FormData();
         mediaFiles.forEach(file => mediaFormData.append('media', file));
 
+        console.log('--- API YÜKLEME İSTEĞİ ÖNCESİ ---');
         const uploadResponse = await api.post('/upload', mediaFormData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
+        console.log('--- API YÜKLEME İSTEĞİ SONRASI ---');
 
         // DEBUG: Log the server response to the console
         console.log('--- SUNUCU YANITI ---');
