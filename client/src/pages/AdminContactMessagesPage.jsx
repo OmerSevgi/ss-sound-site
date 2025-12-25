@@ -79,30 +79,50 @@ const AdminContactMessagesPage = () => {
       </div>
 
       {messages.length === 0 ? <p>Henüz gelen bir mesaj yok.</p> : (
-        <div className="bg-card-light dark:bg-card-dark shadow-md rounded-lg overflow-hidden">
+        <div className="bg-card-light dark:bg-card-dark shadow-md rounded-lg overflow-x-auto">
           <table className="min-w-full leading-normal">
             <thead>
-              <tr>
-                <th>Okundu</th>
-                <th>İsim</th>
-                <th>E-posta</th>
-                <th>Mesaj</th>
-                <th>Tarih</th>
-                <th>İşlemler</th>
+              <tr className="border-b-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-5 py-3">
+                  Okundu
+                </th>
+                <th className="px-5 py-3">
+                  İsim
+                </th>
+                <th className="px-5 py-3">
+                  E-posta
+                </th>
+                <th className="px-5 py-3">
+                  Mesaj
+                </th>
+                <th className="px-5 py-3">
+                  Tarih
+                </th>
+                <th className="px-5 py-3">
+                  İşlemler
+                </th>
               </tr>
             </thead>
             <tbody>
               {messages.map(message => (
-                <tr key={message._id} onClick={() => openModal(message)} className={`${message.isRead ? 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400' : 'bg-white dark:bg-gray-800'} hover:bg-gray-50 dark:hover:bg-gray-600 cursor-pointer`}>
-                  <td>
-                    <input type="checkbox" checked={message.isRead} onChange={(e) => { e.stopPropagation(); markAsRead(message._id); }} />
+                <tr key={message._id} onClick={() => openModal(message)} className={`${message.isRead ? 'bg-gray-100 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400' : 'bg-white dark:bg-gray-800'} hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-200 dark:border-gray-700`}>
+                  <td className="px-5 py-5 text-sm">
+                    <input type="checkbox" checked={message.isRead} onChange={(e) => { e.stopPropagation(); markAsRead(message._id); }} className="w-4 h-4" />
                   </td>
-                  <td>{message.name}</td>
-                  <td>{message.email}</td>
-                  <td>{message.message.substring(0, 50)}...</td>
-                  <td>{new Date(message.createdAt).toLocaleDateString()}</td>
-                  <td>
-                    <button onClick={(e) => { e.stopPropagation(); deleteMessage(message._id); }} className="text-red-500 hover:text-red-700">Sil</button>
+                  <td className="px-5 py-5 text-sm">
+                    <p className="text-gray-900 dark:text-white whitespace-no-wrap">{message.name}</p>
+                  </td>
+                  <td className="px-5 py-5 text-sm">
+                    <p className="text-gray-900 dark:text-white whitespace-no-wrap">{message.email}</p>
+                  </td>
+                  <td className="px-5 py-5 text-sm">
+                    <p className="text-gray-600 dark:text-gray-300 whitespace-no-wrap">{message.message.substring(0, 50)}...</p>
+                  </td>
+                  <td className="px-5 py-5 text-sm">
+                    <p className="text-gray-900 dark:text-white whitespace-no-wrap">{new Date(message.createdAt).toLocaleDateString()}</p>
+                  </td>
+                  <td className="px-5 py-5 text-sm">
+                    <button onClick={(e) => { e.stopPropagation(); deleteMessage(message._id); }} className="text-red-500 hover:text-red-700 whitespace-no-wrap">Sil</button>
                   </td>
                 </tr>
               ))}
