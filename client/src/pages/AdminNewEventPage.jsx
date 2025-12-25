@@ -28,6 +28,11 @@ const AdminNewEventPage = () => {
           },
         });
 
+        // DEBUG: Log the server response to the console
+        console.log('--- SUNUCU YANITI ---');
+        console.log(JSON.stringify(uploadResponse.data, null, 2));
+        console.log('---------------------');
+
         uploadResponse.data.urls.forEach(url => {
           if (typeof url === 'string' && url) {
             if (url.match(/\.(jpeg|jpg|gif|png|webp|svg|bmp)$/i)) {
