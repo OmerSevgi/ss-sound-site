@@ -70,8 +70,7 @@ const EventDetailPage = () => {
             </div>
           ) : (
             <img
-              src={(event.imageUrls && event.imageUrls.length > 0) ? `${process.env.REACT_APP_STATIC_ASSET_URL}
-     ${event.imageUrls[0]}` : 'https://via.placeholder.com/800x600'}
+              src={(event.imageUrls && event.imageUrls.length > 0) ? event.imageUrls[0] : 'https://via.placeholder.com/800x600'}
               alt={event.name}
               className="w-full h-64 lg:h-full object-cover bg-card-light dark:bg-card-dark"
             />
