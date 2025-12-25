@@ -76,7 +76,7 @@ const GallerySection = () => {
               <SwiperSlide key={image._id}>
                 <div className="w-full h-[60vh] rounded-lg overflow-hidden">
                   <img 
-                    src={`${process.env.REACT_APP_STATIC_ASSET_URL}${image.imageUrl}`} 
+                    src={image.imageUrl} 
                     alt={image.caption || 'Galeri görseli'} 
                     className="w-full h-full object-contain" 
                   />
