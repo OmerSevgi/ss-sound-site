@@ -9,9 +9,9 @@ router.post('/', uploadParser.array('media', 10), (req, res) => {
     return res.status(400).json({ message: 'Lütfen en az bir dosya seçin.' });
   }
 
-  // Cloudinary, yüklenen dosyaların URL'lerini 'req.files' içinde 'path' olarak döndürür.
-  // Bu URL'leri toplayıp istemciye gönderelim.
-  const urls = req.files.map(file => file.path);
+  // Cloudinary'den dönen URL'leri toplayıp istemciye gönderelim.
+  // Not: Kütüphane versiyonuna göre URL 'secure_url', 'url' veya 'path' içinde olabilir.
+  const urls = req.files.map(file => file.secure_url || file.url);
   
   res.status(200).json({ 
     message: 'Dosyalar başarıyla Cloudinary\'e yüklendi.',
