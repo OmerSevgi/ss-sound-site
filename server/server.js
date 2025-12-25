@@ -42,6 +42,11 @@ app.use('/api/content', contentRoutes);
 const contactRoutes = require('./routes/contact');
 app.use('/api/contact', contactRoutes);
 
+// === Test rotası ===
+app.get('/', (req, res) => {
+  res.json({ message: '✅ ss Organizasyon API çalışıyor (Render üzerinde).' });
+});
+
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
   // Set static folder
@@ -51,11 +56,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
   });
 }
-
-// === Test rotası ===
-app.get('/', (req, res) => {
-  res.json({ message: '✅ ss Organizasyon API çalışıyor (Render üzerinde).' });
-});
 
 // === MongoDB bağlantısı ===
 const connectDB = async () => {
