@@ -20,9 +20,6 @@ const HomePage = () => {
     threshold: 0.1,
   });
 
-  // ✅ API URL sabitini al — yoksa yedek olarak Render URL'sini kullan
-  const API_URL = process.env.REACT_APP_API_URL || "https://ss-sound-web-site.onrender.com/api";
-
 
   useEffect(() => {
     const fetchRecentEvents = async () => {

@@ -4,14 +4,7 @@ const Event = require('../models/Event');
 exports.getEvents = async (req, res) => {
   try {
     const events = await Event.find().sort({ date: -1 }); // En yeniye göre sırala
-    const fullUrlEvents = events.map(event => {
-      const eventObject = event.toObject();
-      eventObject.imageUrls = event.imageUrls.map(url => 
-        url.startsWith('http') ? url : `${req.protocol}://${req.get('host')}/${url.replace(/\\/g, '/')}`
-      );
-      return eventObject;
-    });
-    res.status(200).json(fullUrlEvents);
+    res.status(200).json(events);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -44,13 +37,8 @@ exports.getEventById = async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
     if (!event) return res.status(404).json({ message: 'Etkinlik bulunamadı' });
-
-    const eventObject = event.toObject();
-    eventObject.imageUrls = event.imageUrls.map(url => 
-      url.startsWith('http') ? url : `${req.protocol}://${req.get('host')}/${url.replace(/\\/g, '/')}`
-    );
     
-    res.status(200).json(eventObject);
+    res.status(200).json(event);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

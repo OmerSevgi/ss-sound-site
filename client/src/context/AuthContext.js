@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import api from '../services/api'; // Import the api instance
 
 const AuthContext = createContext(null);
 
@@ -23,26 +24,23 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-      const data = await response.json();
+      // Use api.post instead of fetch
+      const response = await api.post('/auth/login', { username, password });
+      const data = response.data;
 
-      if (response.ok) {
-        localStorage.setItem('adminToken', data.token);
-        localStorage.setItem('adminUser', JSON.stringify(data)); // Store full user object
-        setUser(data);
-        return { success: true };
-      } else {
-        return { success: false, message: data.message || 'Giriş başarısız' };
-      }
+      // Axios wraps the response, so we don't need to check response.ok the same way
+      // A successful request (2xx status code) will resolve the promise.
+      // An unsuccessful one (4xx, 5xx) will reject it and be caught in the catch block.
+      localStorage.setItem('adminToken', data.token);
+      localStorage.setItem('adminUser', JSON.stringify(data)); // Store full user object
+      setUser(data);
+      return { success: true };
+
     } catch (error) {
       console.error('Giriş hatası:', error);
-      return { success: false, message: 'Sunucuya bağlanılamadı' };
+      // Axios places the server's response data in error.response.data
+      const message = error.response?.data?.message || 'Sunucuya bağlanılamadı';
+      return { success: false, message: message };
     }
   };
 

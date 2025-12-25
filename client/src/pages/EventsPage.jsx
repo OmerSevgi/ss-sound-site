@@ -30,10 +30,6 @@ const EventsPage = () => {
     fetchEvents();
   }, []);
 
-  const baseUrl = process.env.REACT_APP_API_URL
-    ? process.env.REACT_APP_API_URL.replace('/api', '')
-    : '';
-
   if (loading) {
     return (
       <div className="text-text-light dark:text-text-dark text-center p-10">
