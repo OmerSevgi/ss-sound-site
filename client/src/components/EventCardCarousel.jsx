@@ -24,7 +24,7 @@ const EventCardCarousel = ({ imageUrls }) => {
         {imageUrls.map((url, index) => (
           <SwiperSlide key={index}>
             <img
-              src={`${process.env.REACT_APP_STATIC_ASSET_URL}${url}`}
+              src={url}
               alt={`Etkinlik görseli ${index + 1}`}
               className="w-full h-full object-cover bg-gray-900"
             />
