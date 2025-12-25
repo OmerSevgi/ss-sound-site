@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../services/api'; // Use the centralized api instance
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,8 +20,7 @@ const AdminContactMessagesPage = () => {
 
     const fetchMessages = async () => {
       try {
-        const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const res = await axios.get('http://localhost:5001/api/contact', config);
+        const res = await api.get('/contact');
         setMessages(res.data.data);
       } catch (err) {
         setError('Mesajlar yüklenirken bir hata oluştu.');
@@ -36,8 +35,7 @@ const AdminContactMessagesPage = () => {
 
   const markAsRead = async (id) => {
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.put(`http://localhost:5001/api/contact/${id}/read`, {}, config);
+      await api.put(`/contact/${id}/read`);
       setMessages(messages.map(msg => msg._id === id ? { ...msg, isRead: true } : msg));
       if (selectedMessage && selectedMessage._id === id) {
         setSelectedMessage(prev => ({ ...prev, isRead: true }));
@@ -51,8 +49,7 @@ const AdminContactMessagesPage = () => {
   const deleteMessage = async (id) => {
     if (!window.confirm('Bu mesajı silmek istediğinizden emin misiniz?')) return;
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.delete(`${process.env.REACT_APP_API_URL}/api/contact/${id}`, config);
+      await api.delete(`/contact/${id}`);
       setMessages(messages.filter(msg => msg._id !== id));
       setSelectedMessage(null);
       setIsModalOpen(false);
@@ -61,6 +58,7 @@ const AdminContactMessagesPage = () => {
       console.error(err);
     }
   };
+
 
   const openModal = (message) => { setSelectedMessage(message); setIsModalOpen(true); };
   const closeModal = () => { setSelectedMessage(null); setIsModalOpen(false); };
