@@ -156,7 +156,7 @@ const AdminGalleryPage = () => {
             {images.length > 0 ? (
               images.map((image) => (
                 <div key={image._id} className="relative group border rounded-lg overflow-hidden shadow-md">
-                  <img src={`${process.env.REACT_APP_API_URL}${image.imageUrl}`} alt={image.caption || 'Galeri Resmi'} className="w-full h-48 object-cover" />
+                  <img src={image.imageUrl} alt={image.caption || 'Galeri Resmi'} className="w-full h-48 object-cover" />
                   <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2 text-sm opacity-0 group-hover:opacity-100 transition-opacity">
                     {image.caption || 'Açıklama yok'}
                   </div>

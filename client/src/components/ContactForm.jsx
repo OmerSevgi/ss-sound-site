@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useContent } from '../context/ContentContext';
-import axios from 'axios';
+import api from '../services/api';
 
 const ContactForm = () => {
   const { content, loading } = useContent();
@@ -29,7 +29,7 @@ const ContactForm = () => {
     setStatus('');
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/contact`, formData);
+      const res = await api.post('/contact', formData);
       if (res.data.success) {
         setStatus('Mesajınız başarıyla gönderildi!');
         setFormData({ name: '', email: '', phone: '', message: '' });
@@ -37,7 +37,8 @@ const ContactForm = () => {
         setStatus('Mesaj gönderilirken bir hata oluştu: ' + res.data.error);
       }
     } catch (error) {
-      setStatus('Mesaj gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
+      const errorMessage = error.response?.data?.message || 'Mesaj gönderilirken bir hata oluştu. Lütfen tekrar deneyin.';
+      setStatus(errorMessage);
       console.error('Contact form submission error:', error);
     } finally {
       setIsSubmitting(false);
