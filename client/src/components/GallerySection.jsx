@@ -77,12 +77,12 @@ const GallerySection = () => {
                 <div className="w-full h-[60vh] rounded-lg overflow-hidden">
                   <img 
                     src={image.imageUrl} 
-                    alt={image.caption || 'Galeri görseli'} 
+                    alt={image.description || 'Galeri görseli'} 
                     className="w-full h-full object-contain" 
                   />
                 </div>
-                {image.caption && (
-                  <p className="mt-4 text-lg text-text-light/70 dark:text-text-dark/70">{image.caption}</p>
+                {image.description && (
+                  <p className="mt-4 text-lg text-text-light/70 dark:text-text-dark/70">{image.description}</p>
                 )}
               </SwiperSlide>
             ))}
