@@ -5,7 +5,7 @@ const galleryImageSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Resim URL\'si zorunludur'],
   },
-  caption: {
+  description: {
     type: String,
     trim: true,
   },

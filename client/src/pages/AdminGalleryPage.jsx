@@ -6,7 +6,8 @@ const AdminGalleryPage = () => {
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [caption, setCaption] = useState('');
+  const [description, setDescription] = useState('');
+  const [editingDescriptions, setEditingDescriptions] = useState({});
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,6 +18,11 @@ const AdminGalleryPage = () => {
       setIsFetching(true);
       const response = await api.get('/gallery');
       setImages(response.data);
+      const initialDescriptions = response.data.reduce((acc, img) => {
+        acc[img._id] = img.description || '';
+        return acc;
+      }, {});
+      setEditingDescriptions(initialDescriptions);
       setError('');
     } catch (err) {
       setError('Resimler yüklenemedi: ' + (err.response?.data?.message || err.message));
@@ -55,17 +61,32 @@ const AdminGalleryPage = () => {
       const { urls } = uploadResponse.data;
       if (!urls || urls.length === 0) throw new Error('Dosyalar yüklendi ancak resim URL\'leri alınamadı.');
 
-      await api.post('/gallery', { imageUrls: urls, caption });
+      await api.post('/gallery', { imageUrls: urls, description });
 
       setSuccess(`${urls.length} resim başarıyla yüklendi!`);
       setSelectedFiles([]);
-      setCaption('');
+      setDescription('');
       document.getElementById('imageFile').value = null;
       fetchImages();
     } catch (err) {
       setError('Yükleme başarısız: ' + (err.response?.data?.message || err.message));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDescriptionChange = (e, id) => {
+    setEditingDescriptions({ ...editingDescriptions, [id]: e.target.value });
+  };
+
+  const handleDescriptionUpdate = async (id) => {
+    try {
+      await api.put(`/gallery/${id}`, { description: editingDescriptions[id] });
+      setSuccess('Açıklama başarıyla güncellendi.');
+      // Refetch images to confirm update
+      fetchImages(); 
+    } catch (err) {
+      setError('Açıklama güncellenemedi: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -102,14 +123,14 @@ const AdminGalleryPage = () => {
         <h2 className="text-xl font-semibold mb-4">Yeni Resim(ler) Yükle</h2>
         <form onSubmit={handleUpload}>
           <div className="mb-4">
-            <label htmlFor="caption" className="block text-text-light dark:text-text-dark font-medium mb-2">
+            <label htmlFor="description" className="block text-text-light dark:text-text-dark font-medium mb-2">
               Resim Açıklaması (Tümü için geçerli, opsiyonel)
             </label>
             <input
               type="text"
-              id="caption"
-              value={caption}
-              onChange={(e) => setCaption(e.target.value)}
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark bg-background-light dark:bg-background-dark"
             />
           </div>
@@ -152,20 +173,34 @@ const AdminGalleryPage = () => {
       <div>
         <h2 className="text-xl font-semibold mb-4">Mevcut Resimler</h2>
         {isFetching ? <p>Resimler yükleniyor...</p> : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {images.length > 0 ? (
               images.map((image) => (
-                <div key={image._id} className="relative group border rounded-lg overflow-hidden shadow-md">
-                  <img src={image.imageUrl} alt={image.caption || 'Galeri Resmi'} className="w-full h-48 object-cover" />
-                  <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2 text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                    {image.caption || 'Açıklama yok'}
+                <div key={image._id} className="border rounded-lg overflow-hidden shadow-md bg-card-light dark:bg-card-dark flex flex-col">
+                  <img src={image.imageUrl} alt={editingDescriptions[image._id] || 'Galeri Resmi'} className="w-full h-48 object-cover" />
+                  <div className="p-4 flex flex-col flex-grow">
+                    <textarea
+                      value={editingDescriptions[image._id] || ''}
+                      onChange={(e) => handleDescriptionChange(e, image._id)}
+                      className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark text-sm flex-grow"
+                      placeholder="Resim açıklaması girin..."
+                      rows="3"
+                    ></textarea>
+                    <div className="flex justify-between items-center mt-3">
+                      <button
+                        onClick={() => handleDescriptionUpdate(image._id)}
+                        className="bg-primary-light text-white px-3 py-1 rounded-lg hover:bg-opacity-80 text-sm"
+                      >
+                        Kaydet
+                      </button>
+                      <button
+                        onClick={() => handleDelete(image._id)}
+                        className="bg-red-600 text-white rounded-full p-2 text-xs hover:bg-red-700"
+                      >
+                        Sil
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    onClick={() => handleDelete(image._id)}
-                    className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-2 text-xs opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700"
-                  >
-                    Sil
-                  </button>
                 </div>
               ))
             ) : (
